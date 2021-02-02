@@ -3,13 +3,13 @@ import flatspec._
 import matchers._
 
 class S99Spec extends AnyFlatSpec with should.Matchers {
-  
-  "findKth" should "return list element at index k" in {
-    S99.findKth(1, List(1, 2, 3)) should be(Some(2))
+
+  "nth" should "return list element at index k" in {
+    S99.nth(1, List(1, 2, 3)) should be(Some(2))
   }
 
-  "findKth" should "return None if index is out of bounds" in {
-    S99.findKth(10, List(1, 2, 3)) should be(None)
+  "nth" should "return None if index is out of bounds" in {
+    S99.nth(10, List(1, 2, 3)) should be(None)
   }
 
   "isPalindrome" should "return true if list is palindrome" in {
@@ -54,13 +54,27 @@ class S99Spec extends AnyFlatSpec with should.Matchers {
     )
   }
 
-  "encode" should "run-length encode the list" in {
-    S99.encode(List('a', 'a', 'b', 'c')) should be(
+  "encodeDirect" should "run-length encodeDirect the list" in {
+    S99.encodeDirect(List('a', 'a', 'b', 'c')) should be(
       List((2, 'a'), (1, 'b'), (1, 'c'))
     )
-    
-    S99.encode(List('a', 'a', 'a', 'b', 'b', 'c', 'e', 'e', 'e')) should be(
+
+    S99.encodeDirect(
+      List('a', 'a', 'a', 'b', 'b', 'c', 'e', 'e', 'e')
+    ) should be(
       List((3, 'a'), (2, 'b'), (1, 'c'), (3, 'e'))
     )
+  }
+
+  "decode" should "decode run length encoded list" in {
+    S99.decode(
+      List((4, 'a), (1, 'b), (2, 'c), (2, 'a), (1, 'd), (4, 'e))
+    ) should be(List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e))
+  }
+
+  "decode" should "round trip a list" in {
+    val l = List('a', 'a', 'a', 'b', 'c', 'c', 'd', 'e', 'e')
+    S99.decode(S99.encodeDirect(l)) should be(l)
+
   }
 }
