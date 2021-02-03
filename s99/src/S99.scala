@@ -116,4 +116,9 @@ object S99 {
     case _ if s > e       => throw new InvalidParameterException("`s` must be >= `e`")
     case _                => List()
   }
+
+  def rotate[A](n: Int, l: List[A]): List[A] = {
+    val (left, right) = split(n, l)
+    right :++ left
+  }
 }

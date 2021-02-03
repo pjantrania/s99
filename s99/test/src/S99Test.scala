@@ -114,4 +114,10 @@ class S99Spec extends AnyFlatSpec with should.Matchers {
   }
 
   an[InvalidParameterException] should be thrownBy S99.slice(2, 1, List('a))
+
+  "rotate" should "move first N elements to the end of the list" in {
+    S99.rotate(3, List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k)) should be(
+      List('d, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'a, 'b, 'c)
+    )
+  }
 }
