@@ -97,4 +97,14 @@ object S99 {
 
     helper(n, n, l)
   }
+
+  def split[A](n: Int, l: List[A]): (List[A], List[A]) = {
+    def helper(n: Int, l: List[A], c: (List[A], List[A])): (List[A], List[A]) = l match {
+      case x :: xs if n > 0 => helper(n-1, xs, (x :: c._1, xs))
+      case _ => c
+    }
+
+    val r = helper(n, l, (List(), List()))
+    (reverse(r._1), r._2)
+  }
 }
