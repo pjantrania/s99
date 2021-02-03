@@ -1,6 +1,7 @@
 import org.scalatest._
 import flatspec._
 import matchers._
+import java.security.InvalidParameterException
 
 class S99Spec extends AnyFlatSpec with should.Matchers {
 
@@ -101,4 +102,16 @@ class S99Spec extends AnyFlatSpec with should.Matchers {
       (List('a, 'b, 'c), List('d, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
     )
   }
+
+  "slice" should "return sublist in index range [s, e)" in {
+    S99.slice(3, 7, List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k)) should be(
+      List('d, 'e, 'f, 'g)
+    )
+  }
+
+  "slice" should "return empty list when s == e" in {
+    S99.slice(2, 2, List(1, 2, 3)) should be(List())
+  }
+
+  an[InvalidParameterException] should be thrownBy S99.slice(2, 1, List('a))
 }

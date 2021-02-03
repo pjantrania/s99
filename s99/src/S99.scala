@@ -1,3 +1,4 @@
+import java.security.InvalidParameterException
 object S99 {
   def penultimate[A](l: List[A]): Option[A] = l match {
     case x :: y :: Nil => Some(x)
@@ -90,21 +91,29 @@ object S99 {
 
   def drop[A](n: Int, l: List[A]): List[A] = {
     def helper(n: Int, c: Int, l: List[A]): List[A] = l match {
-      case Nil => List()
+      case Nil               => List()
       case x :: xs if c == 1 => helper(n, n, xs)
-      case x :: xs => x :: helper(n, c-1, xs)
+      case x :: xs           => x :: helper(n, c - 1, xs)
     }
 
     helper(n, n, l)
   }
 
   def split[A](n: Int, l: List[A]): (List[A], List[A]) = {
-    def helper(n: Int, l: List[A], c: (List[A], List[A])): (List[A], List[A]) = l match {
-      case x :: xs if n > 0 => helper(n-1, xs, (x :: c._1, xs))
-      case _ => c
-    }
+    def helper(n: Int, l: List[A], c: (List[A], List[A])): (List[A], List[A]) =
+      l match {
+        case x :: xs if n > 0 => helper(n - 1, xs, (x :: c._1, xs))
+        case _                => c
+      }
 
     val r = helper(n, l, (List(), List()))
     (reverse(r._1), r._2)
+  }
+
+  def slice[A](s: Int, e: Int, l: List[A]): List[A] = l match {
+    case x :: xs if s > 0 => slice(s - 1, e - 1, xs)
+    case x :: xs if e > 0 => x :: slice(s, e - 1, xs)
+    case _ if s > e       => throw new InvalidParameterException("`s` must be >= `e`")
+    case _                => List()
   }
 }
