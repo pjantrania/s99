@@ -81,10 +81,20 @@ object S99 {
       case x :: xs if c > 0 => x :: helper(n, c - 1, l)
       case x :: xs          => helper(n, n, xs)
     }
-    
+
     l match {
       case Nil => List()
       case _   => helper(n, n, l)
     }
+  }
+
+  def drop[A](n: Int, l: List[A]): List[A] = {
+    def helper(n: Int, c: Int, l: List[A]): List[A] = l match {
+      case Nil => List()
+      case x :: xs if c == 1 => helper(n, n, xs)
+      case x :: xs => x :: helper(n, c-1, xs)
+    }
+
+    helper(n, n, l)
   }
 }
