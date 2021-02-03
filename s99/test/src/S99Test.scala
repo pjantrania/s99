@@ -83,4 +83,10 @@ class S99Spec extends AnyFlatSpec with should.Matchers {
       List('a, 'a, 'b, 'b, 'c, 'c, 'c, 'c, 'd, 'd)
     )
   }
+
+  "duplicateN" should "duplicate each element in the list N times" in {
+    S99.duplicateN(3, List('a, 'b, 'c, 'c, 'd)) should be(
+      List('a, 'a, 'a, 'b, 'b, 'b, 'c, 'c, 'c, 'c, 'c, 'c, 'd, 'd, 'd)
+    )
+  }
 }

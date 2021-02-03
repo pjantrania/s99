@@ -71,7 +71,20 @@ object S99 {
   }
 
   def duplicate[A](l: List[A]): List[A] = l match {
-    case Nil => List()
+    case Nil     => List()
     case x :: xs => x :: x :: duplicate(xs)
+  }
+
+  def duplicateN[A](n: Int, l: List[A]): List[A] = {
+    def helper(n: Int, c: Int, l: List[A]): List[A] = l match {
+      case Nil              => List()
+      case x :: xs if c > 0 => x :: helper(n, c - 1, l)
+      case x :: xs          => helper(n, n, xs)
+    }
+    
+    l match {
+      case Nil => List()
+      case _   => helper(n, n, l)
+    }
   }
 }
