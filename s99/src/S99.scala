@@ -121,4 +121,13 @@ object S99 {
     val (left, right) = split(n, l)
     right :++ left
   }
+
+  def removeAt[A](n: Int, l: List[A]): (List[A], A) = l match {
+    case Nil               => (List(), Nil.asInstanceOf[A])
+    case x :: xs if n == 0 => (xs, x)
+    case x :: xs => {
+      val (sublist, element) = removeAt(n - 1, xs)
+      (x :: sublist, element)
+    }
+  }
 }

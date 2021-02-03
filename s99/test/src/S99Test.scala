@@ -120,4 +120,8 @@ class S99Spec extends AnyFlatSpec with should.Matchers {
       List('d, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'a, 'b, 'c)
     )
   }
+
+  "removeAt" should "return list without element at index N" in {
+    S99.removeAt(1, List('a, 'b, 'c, 'd)) should be((List('a, 'c, 'd),'b))
+  }
 }
