@@ -69,4 +69,9 @@ object S99 {
       case x :: xs => reverse(helper((x._1 - 1, x._2) :: xs, List(x._2)))
     }
   }
+
+  def duplicate[A](l: List[A]): List[A] = l match {
+    case Nil => List()
+    case x :: xs => x :: x :: duplicate(xs)
+  }
 }

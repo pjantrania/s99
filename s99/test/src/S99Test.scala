@@ -77,4 +77,10 @@ class S99Spec extends AnyFlatSpec with should.Matchers {
     S99.decode(S99.encodeDirect(l)) should be(l)
 
   }
+
+  "duplicate" should "duplicate each element in the list" in {
+    S99.duplicate(List('a, 'b, 'c, 'c, 'd)) should be(
+      List('a, 'a, 'b, 'b, 'c, 'c, 'c, 'c, 'd, 'd)
+    )
+  }
 }
