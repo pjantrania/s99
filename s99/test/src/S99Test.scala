@@ -2,6 +2,7 @@ import org.scalatest._
 import flatspec._
 import matchers._
 import java.security.InvalidParameterException
+import scala.util.Random
 
 class S99Spec extends AnyFlatSpec with should.Matchers {
 
@@ -129,5 +130,15 @@ class S99Spec extends AnyFlatSpec with should.Matchers {
     S99.insertAt('new, 1, List('a, 'b, 'c, 'd)) should be(
       List('a, 'new, 'b, 'c, 'd)
     )
+  }
+
+  "range" should "return list containing the interval [s, e]" in {
+    S99.range(4, 9) should be(List(4, 5, 6, 7, 8, 9))
+  }
+
+  "randomSelect" should "return list with N elements from input list" in {
+    val l = List('a, 'b, 'c, 'd, 'f, 'g, 'h)
+    val r = S99.randomSelect(3, l, Some(new Random(10)))
+    r should be(List('c, 'a, 'g))
   }
 }

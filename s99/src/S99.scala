@@ -1,4 +1,5 @@
 import java.security.InvalidParameterException
+import scala.util.Random
 object S99 {
   def penultimate[A](l: List[A]): Option[A] = l match {
     case x :: y :: Nil => Some(x)
@@ -135,5 +136,25 @@ object S99 {
     case Nil               => List()
     case x :: xs if n == 0 => e :: x :: xs
     case x :: xs           => x :: insertAt(e, n - 1, xs)
+  }
+
+  def range(s: Int, e: Int): List[Int] = s match {
+    case n if n <= e => n :: range(n + 1, e)
+    case _           => List()
+  }
+
+  def randomSelect[A](
+      n: Int,
+      l: List[A],
+      ra: Option[Random] = None
+  ): List[A] = {
+    val r = ra.getOrElse(Random)
+    n match {
+      case 0 => List()
+      case _ => {
+        val (remaining, selected) = removeAt(r.nextInt(length(l)), l)
+        selected :: randomSelect(n - 1, remaining, Some(r))
+      }
+    }
   }
 }
