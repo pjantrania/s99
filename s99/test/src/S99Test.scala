@@ -141,4 +141,10 @@ class S99Spec extends AnyFlatSpec with should.Matchers {
     val r = S99.randomSelect(3, l, Some(new Random(10)))
     r should be(List('c, 'a, 'g))
   }
+
+  "lotto" should "return list of N unique numbers in range [1, M]" in {
+    val r = S99.lotto(6, 49)
+    r should have length (6)
+    r should equal(r.distinct)
+  }
 }

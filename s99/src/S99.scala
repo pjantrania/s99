@@ -157,4 +157,6 @@ object S99 {
       }
     }
   }
+
+  def lotto(n: Int, m: Int): List[Int] = randomSelect(n, range(1, m))
 }
