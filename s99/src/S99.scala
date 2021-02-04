@@ -130,4 +130,10 @@ object S99 {
       (x :: sublist, element)
     }
   }
+
+  def insertAt[A](e: A, n: Int, l: List[A]): List[A] = l match {
+    case Nil               => List()
+    case x :: xs if n == 0 => e :: x :: xs
+    case x :: xs           => x :: insertAt(e, n - 1, xs)
+  }
 }
