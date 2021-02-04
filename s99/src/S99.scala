@@ -159,4 +159,6 @@ object S99 {
   }
 
   def lotto(n: Int, m: Int): List[Int] = randomSelect(n, range(1, m))
+
+  def randomPermute[A](l: List[A]): List[A] = randomSelect(length(l), l)
 }

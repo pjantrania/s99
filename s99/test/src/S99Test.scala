@@ -147,4 +147,12 @@ class S99Spec extends AnyFlatSpec with should.Matchers {
     r should have length (6)
     r should equal(r.distinct)
   }
+
+  "randomPermute" should "return a permutation of input list" in {
+    val l = List('a, 'b, 'c, 'd, 'e, 'f)
+    val r = S99.randomPermute(l)
+
+    r should have length(S99.length(l))
+    r should contain theSameElementsAs(l)
+  }
 }
