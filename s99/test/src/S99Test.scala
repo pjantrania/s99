@@ -3,6 +3,7 @@ import flatspec._
 import matchers._
 import java.security.InvalidParameterException
 import scala.util.Random
+import s99.S99
 
 class S99Spec extends AnyFlatSpec with should.Matchers {
 

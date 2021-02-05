@@ -1,3 +1,4 @@
+package s99
 import java.security.InvalidParameterException
 import scala.util.Random
 object S99 {
