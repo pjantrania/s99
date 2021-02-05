@@ -172,4 +172,29 @@ object S99 {
           combinations(n - 1, xs).map(y => x :: y) :++ combinations(n, xs)
       }
   }
+
+  // https://stackoverflow.com/questions/19385235/how-to-paramaterize-int-as-ordered-in-scala
+  private def sort_impl[A, B <% Ordered[B]](
+      l: List[A],
+      f: (A) => B
+  ): List[A] = {
+    def insertOrdered(a: A, l: List[A]): List[A] = l match {
+      case Nil                    => List(a)
+      case x :: xs if f(a) < f(x) => a :: x :: xs
+      case x :: xs                => x :: insertOrdered(a, xs)
+    }
+
+    def helper(l: List[A], c: List[A]): List[A] = l match {
+      case Nil     => c
+      case x :: xs => helper(xs, insertOrdered(x, c))
+    }
+
+    helper(l, List())
+  }
+
+  def sort[A <% Ordered[A]](l: List[A], f: (A) => A = (x: A) => x): List[A] =
+    sort_impl(l, f)
+
+  def lsort[A <% Ordered[A]](l: List[List[A]]): List[List[A]] =
+    sort_impl(l, (x: List[A]) => length(x))
 }

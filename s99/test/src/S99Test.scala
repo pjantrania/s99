@@ -196,4 +196,38 @@ class S99Spec extends AnyFlatSpec with should.Matchers {
       )
     )
   }
+
+  "sort" should "return the list in order" in {
+    S99.sort(S99.randomPermute(S99.range(1, 10))) should be(S99.range(1, 10))
+  }
+
+  "sort" should "return the list in descending order" in {
+    S99.sort(S99.randomPermute(S99.range(1, 10)), (x: Int) => -x) should be(
+      S99.reverse(S99.range(1, 10))
+    )
+  }
+
+  "lsort" should "return list of lists in length order" in {
+    S99.lsort(
+      List(
+        List('a, 'b, 'c),
+        List('d, 'e),
+        List('f, 'g, 'h),
+        List('d, 'e),
+        List('i, 'j, 'k, 'l),
+        List('m, 'n),
+        List('o)
+      )
+    ) should be(
+      List(
+        List('o),
+        List('d, 'e),
+        List('d, 'e),
+        List('m, 'n),
+        List('a, 'b, 'c),
+        List('f, 'g, 'h),
+        List('i, 'j, 'k, 'l)
+      )
+    )
+  }
 }
