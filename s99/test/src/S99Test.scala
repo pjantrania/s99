@@ -152,7 +152,47 @@ class S99Spec extends AnyFlatSpec with should.Matchers {
     val l = List('a, 'b, 'c, 'd, 'e, 'f)
     val r = S99.randomPermute(l)
 
-    r should have length(S99.length(l))
-    r should contain theSameElementsAs(l)
+    r should have length (S99.length(l))
+    r should contain theSameElementsAs (l)
+  }
+
+  "combinations" should "return every 1-length sublist of input list" in {
+    S99.combinations(1, List(1, 2, 3)) should be(
+      List(
+        List(1),
+        List(2),
+        List(3)
+      )
+    )
+  }
+
+  "combinations" should "return every 2-length sublist of input list" in {
+    S99.combinations(2, List(1, 2, 3, 4)) should be(
+      List(
+        List(1, 2),
+        List(1, 3),
+        List(1, 4),
+        List(2, 3),
+        List(2, 4),
+        List(3, 4)
+      )
+    )
+  }
+
+  "combinations" should "return every 3-length sublist of input list" in {
+    S99.combinations(3, List('A', 'B', 'C', 'D', 'E')) should be(
+      List(
+        List('A', 'B', 'C'),
+        List('A', 'B', 'D'),
+        List('A', 'B', 'E'),
+        List('A', 'C', 'D'),
+        List('A', 'C', 'E'),
+        List('A', 'D', 'E'),
+        List('B', 'C', 'D'),
+        List('B', 'C', 'E'),
+        List('B', 'D', 'E'),
+        List('C', 'D', 'E')
+      )
+    )
   }
 }

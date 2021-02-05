@@ -161,4 +161,14 @@ object S99 {
   def lotto(n: Int, m: Int): List[Int] = randomSelect(n, range(1, m))
 
   def randomPermute[A](l: List[A]): List[A] = randomSelect(length(l), l)
+
+  def combinations[A](n: Int, l: List[A]): List[List[A]] = n match {
+    case 1 => l.map(x => List(x))
+    case _ =>
+      l match {
+        case Nil => List()
+        case x :: xs =>
+          combinations(n - 1, xs).map(y => x :: y) :++ combinations(n, xs)
+      }
+  }
 }
