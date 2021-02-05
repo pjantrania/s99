@@ -3,9 +3,9 @@ import flatspec._
 import matchers._
 import java.security.InvalidParameterException
 import scala.util.Random
-import s99.S99
+import s99.{S99List => S99}
 
-class S99Spec extends AnyFlatSpec with should.Matchers {
+class S99ListSpec extends AnyFlatSpec with should.Matchers {
 
   "nth" should "return list element at index k" in {
     S99.nth(1, List(1, 2, 3)) should be(Some(2))

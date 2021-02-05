@@ -1,7 +1,7 @@
 package s99
 import java.security.InvalidParameterException
 import scala.util.Random
-object S99 {
+object S99List {
   def penultimate[A](l: List[A]): Option[A] = l match {
     case x :: y :: Nil => Some(x)
     case x :: Nil      => None
