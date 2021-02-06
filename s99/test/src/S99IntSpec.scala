@@ -15,4 +15,8 @@ class S99IntSpec extends AnyFlatSpec with should.Matchers with AppendedClues {
       x.isPrime should be(false) withClue s"$x shouldn't be prime but is"
     )
   }
+
+  "gcd" should "return greatest common divisor of the inputs" in {
+    gcd(36, 63) should be(9)
+  }
 }
