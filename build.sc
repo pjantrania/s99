@@ -1,6 +1,6 @@
 import mill._, scalalib._
 object s99 extends ScalaModule {
-  def scalaVersion = "2.13.1"
+  def scalaVersion = "2.13.4"
 
   object test extends Tests {
     def ivyDeps = Agg(
@@ -9,5 +9,11 @@ object s99 extends ScalaModule {
     )
 
     def testFrameworks = Seq("org.scalatest.tools.Framework")
+
+    // https://github.com/lihaoyi/mill/issues/344#issuecomment-440902352
+    // mill s99.test.testOne (TestClass)
+    def testOne(args: String*) = T.command {
+      super.runMain("org.scalatest.run", args: _*)
+    }
   }
 }

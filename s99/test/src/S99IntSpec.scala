@@ -19,4 +19,16 @@ class S99IntSpec extends AnyFlatSpec with should.Matchers with AppendedClues {
   "gcd" should "return greatest common divisor of the inputs" in {
     gcd(36, 63) should be(9)
   }
+
+  "totient" should "return the number of positive integers coprime to the number" in {
+    10.improvedTotient should be(4)
+  }
+
+  "primeFactors" should "return a list of prime numbers whose product is the number" in {
+    315.primeFactors should be(List(3, 3, 5, 7))
+  }
+
+  "primeFactorMultiplicity" should "return list of (factor, count) tuples" in {
+    315.primeFactorMultiplicity should be(List((3,2), (5,1), (7,1)))
+  }
 }
