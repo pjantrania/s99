@@ -21,7 +21,8 @@ class S99IntSpec extends AnyFlatSpec with should.Matchers with AppendedClues {
   }
 
   "totient" should "return the number of positive integers coprime to the number" in {
-    10.improvedTotient should be(4)
+    10.totient should be(4)
+    10090.improvedTotient should be(4032)
   }
 
   "primeFactors" should "return a list of prime numbers whose product is the number" in {
