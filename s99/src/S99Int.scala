@@ -29,15 +29,13 @@ class S99Int(val start: Int) {
     encodeDirect(this.primeFactors).map(x => (x._2, x._1))
 
   def improvedTotient = this.primeFactorMultiplicity
-    .map(x =>
-      x match {
-        case (f, m) => (f - 1) * Math.pow(f, m - 1).toInt
-      }
-    )
+    .map { case (f, m) =>
+      (f - 1) * Math.pow(f, m - 1).toInt
+    }
     .reduce((a, b) => a * b)
 
   def goldbach: Option[(Int, Int)] = {
-    if(this.start % 2 != 0)
+    if (this.start % 2 != 0)
       return None
 
     val maxPrime = listPrimesInRange(2 to this.start).last
@@ -65,6 +63,13 @@ object S99Int {
 
   def listPrimesInRange(r: Range) =
     primeStream.dropWhile(_ < r.start).takeWhile(_ <= r.end).toList
-  
-  def goldbachList(r: Range) = TreeMap(r.filter(_ % 2 == 0).map(i => i -> i.goldbach.get):_*)
+
+  def goldbachList(r: Range) = TreeMap(
+    r.filter(_ % 2 == 0).map(i => i -> i.goldbach.get): _*
+  )
+
+  def printGoldbachList(r: Range): Unit = goldbachList(r).foreach {
+    case (sum, (addend1, addend2)) =>
+      println(s"$sum = $addend1 + $addend2")
+  }
 }
