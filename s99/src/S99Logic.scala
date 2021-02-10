@@ -12,7 +12,6 @@ class S99Logic(a: Boolean) {
   def equ(b: Boolean): Boolean = b.impl(a).and(a.impl(b))
 }
 
-
 object S99Logic {
   implicit def boolean2S99Logic(a: Boolean): S99Logic = new S99Logic(a)
   def and(a: Boolean, b: Boolean): Boolean = a && b
