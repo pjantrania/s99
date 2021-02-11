@@ -35,9 +35,24 @@ class S99LogicSpec extends AnyFlatSpec with should.Matchers {
     )
   }
 
-  "greyCode" should "return list of 2^n strings that follow the pattern" in {
-    greyCode(3) should be(
+  "grey" should "return list of 2^n strings that follow the grey code" in {
+    grey(3) should be(
       List("000", "001", "011", "010", "110", "111", "101", "100")
+    )
+  }
+
+  "huffman" should "return list of (symbol, code) pairs according to huffman code" in {
+    huffman(
+      List(('a', 45), ('b', 13), ('c', 12), ('d', 16), ('e', 9), ('f', 5))
+    ) should contain theSameElementsAs(
+      List(
+        ('a', "0"),
+        ('b', "101"),
+        ('c', "100"),
+        ('d', "111"),
+        ('e', "1101"),
+        ('f', "1100")
+      )
     )
   }
 }
