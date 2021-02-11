@@ -34,4 +34,10 @@ class S99LogicSpec extends AnyFlatSpec with should.Matchers {
          |false false false""".stripMargin
     )
   }
+
+  "greyCode" should "return list of 2^n strings that follow the pattern" in {
+    greyCode(3) should be(
+      List("000", "001", "011", "010", "110", "111", "101", "100")
+    )
+  }
 }

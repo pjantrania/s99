@@ -1,5 +1,6 @@
 package s99.logic
 import s99.S99List.{flatten}
+import scala.collection.mutable.{Map => MutableMap}
 
 class S99Logic(a: Boolean) {
   import S99Logic._
@@ -39,5 +40,31 @@ object S99Logic {
           result.toString()
       }.toList
     ).mkString("\n")
+  }
+
+  lazy val greyCode = memoize(greyCodeImpl)
+
+  private def greyCodeImpl(n: Int): List[String] = n match {
+    case 1 => List("0", "1")
+    case _ =>
+      greyCodeImpl(1)
+        .map(a =>
+          a(0) match {
+            case '0' => greyCodeImpl(n - 1).map(b => a + b)
+            case '1' => greyCodeImpl(n - 1).reverse.map(b => a + b)
+          }
+        )
+        .flatten
+  }
+
+  private def memoize[K, V](f: K => V): K => V = {
+    val cache = MutableMap.empty[K, V]
+    k =>
+      cache.getOrElse(
+        k, {
+          cache.update(k, f(k))
+          cache(k)
+        }
+      )
   }
 }
