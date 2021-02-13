@@ -58,9 +58,36 @@ class S99TreeSpec extends AnyFlatSpec with should.Matchers {
     ).isSymmetric should be(true)
   }
 
+  "isSymmetric" should "return whether BST is symmetric" in {
+    S99Tree.fromList(List(5, 3, 18, 1, 4, 12, 21)).isSymmetric should be(true)
+    S99Tree.fromList(List(3, 2, 5, 7, 4)).isSymmetric should not be (true)
+  }
+
+  "addValue" should "return tree with new value obeying BST property" in {
+    End
+      .addValue(3)
+      .addValue(4)
+      .addValue(0)
+      .addValue(2)
+      .addValue(1)
+      .addValue(-1)
+      .toString() should be(
+      "T(3 T(0 T(-1 . .) T(2 T(1 . .) .)) T(4 . .))"
+    )
+  }
+
+  "fromList" should "return BST with of list values" in {
+    S99Tree.fromList(List(3, 2, 5, 7, 1)).toString() should be(
+      "T(3 T(2 T(1 . .) .) T(5 . T(7 . .)))"
+    )
+  }
+
   "symmetricBalancedTrees" should "return all balanced symmetric trees with n elements" in {
     S99Tree.symmetricBalancedTrees(5, "x").map(_.toString()) should be(
-      List("T(x T(x . T(x . .)) T(x T(x . .) .))", "T(x T(x T(x . .) .) T(x . T(x . .)))")
+      List(
+        "T(x T(x . T(x . .)) T(x T(x . .) .))",
+        "T(x T(x T(x . .) .) T(x . T(x . .)))"
+      )
     )
   }
 }

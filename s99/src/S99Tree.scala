@@ -6,6 +6,13 @@ sealed abstract class S99Tree[+T] {
     case Node(_, left, right) => left.isMirrorOf(right)
   }
 
+  def addValue[U >: T <% Ordered[U]](x: U): S99Tree[U] = this match {
+    case End => Node(x)
+    case Node(value, left, right) if x < value =>
+      Node(value, left.addValue(x), right)
+    case Node(value, left, right) => Node(value, left, right.addValue(x))
+  }
+
   private def isMirrorOf(t: S99Tree[Any]): Boolean = {
     (this, t) match {
       case (t1: Node[Any], t2: Node[Any]) =>
@@ -56,4 +63,7 @@ object S99Tree {
       case 1 => cBalanced(n, x).filter(_.isSymmetric)
       case 0 => List.empty[S99Tree[A]]
     }
+
+  def fromList[U <% Ordered[U]](l: List[U]): S99Tree[U] =
+    l.foldLeft(End.asInstanceOf[S99Tree[U]])((a, b) => a.addValue(b))
 }
