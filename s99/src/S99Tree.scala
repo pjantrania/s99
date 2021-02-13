@@ -6,11 +6,32 @@ sealed abstract class S99Tree[+T] {
     case Node(_, left, right) => left.isMirrorOf(right)
   }
 
+  def depth: Int = this match {
+    case End                      => 0
+    case Node(value, left, right) => 1 + math.max(left.depth, right.depth)
+  }
+
   def addValue[U >: T <% Ordered[U]](x: U): S99Tree[U] = this match {
     case End => Node(x)
     case Node(value, left, right) if x < value =>
       Node(value, left.addValue(x), right)
     case Node(value, left, right) => Node(value, left, right.addValue(x))
+  }
+
+  def stringRepr(): String = {
+    (1 to this.depth)
+      .map(i => {
+        val prefixSpaceCount = math.pow(2, this.depth - i).toInt - 1
+        val separatorSpaceCount = math.pow(2, this.depth - i + 1).toInt - 1
+        " ".repeat(prefixSpaceCount) + this
+          .collectNodesAtDepth(i)
+          .map {
+            case End                      => "."
+            case Node(value, left, right) => value.toString()
+          }
+          .mkString(" ".repeat(separatorSpaceCount))
+      })
+      .mkString("\n")
   }
 
   private def isMirrorOf(t: S99Tree[Any]): Boolean = {
@@ -21,6 +42,17 @@ sealed abstract class S99Tree[+T] {
       case (_, _)     => false
     }
   }
+
+  private def collectNodesAtDepth(d: Int, c: Int = 1): List[S99Tree[Any]] =
+    this match {
+      case End                         => List.fill(math.pow(2, d - c).toInt)(End)
+      case Node(value, _, _) if c == d => List(Node(value))
+      case Node(_, left, right) =>
+        left.collectNodesAtDepth(d, c + 1) :++ right.collectNodesAtDepth(
+          d,
+          c + 1
+        )
+    }
 }
 
 case class Node[+T](value: T, left: S99Tree[T], right: S99Tree[T])
@@ -64,6 +96,6 @@ object S99Tree {
       case 0 => List.empty[S99Tree[A]]
     }
 
-  def fromList[U <% Ordered[U]](l: List[U]): S99Tree[U] =
+  def fromList[U <% Ordered[U]](l: IterableOnce[U]): S99Tree[U] =
     l.foldLeft(End.asInstanceOf[S99Tree[U]])((a, b) => a.addValue(b))
 }
