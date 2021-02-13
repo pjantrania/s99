@@ -1,6 +1,21 @@
 package s99.binarytree
 
-sealed abstract class S99Tree[+T]
+sealed abstract class S99Tree[+T] {
+  def isSymmetric: Boolean = this match {
+    case End                  => true
+    case Node(_, left, right) => left.isMirrorOf(right)
+  }
+
+  private def isMirrorOf(t: S99Tree[Any]): Boolean = {
+    (this, t) match {
+      case (t1: Node[Any], t2: Node[Any]) =>
+        t1.left.isMirrorOf(t2.right) && t1.right.isMirrorOf(t2.left)
+      case (End, End) => true
+      case (_, _)     => false
+    }
+  }
+}
+
 case class Node[+T](value: T, left: S99Tree[T], right: S99Tree[T])
     extends S99Tree[T] {
   override def toString =

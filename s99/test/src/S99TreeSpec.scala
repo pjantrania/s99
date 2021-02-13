@@ -47,4 +47,14 @@ class S99TreeSpec extends AnyFlatSpec with should.Matchers {
       )
     )
   }
+
+  "isSymmetric" should "return true if left subtree mirrors right" in {
+    Node('a', Node('b'), Node('c')).isSymmetric should be(true)
+    End.isSymmetric should be(true)
+    Node(
+      'a',
+      Node('b', End, Node('c')),
+      Node('d', Node('e'), End)
+    ).isSymmetric should be(true)
+  }
 }
