@@ -33,7 +33,7 @@ object Node {
 object S99Tree {
   def cBalanced[A](n: Int, x: A): List[S99Tree[A]] = n match {
     case 0 => List(End)
-    case 1 => List(Node(x, End, End))
+    case 1 => List(Node(x))
     case _ =>
       (n - 1) % 2 match {
         case 1 =>
@@ -44,7 +44,16 @@ object S99Tree {
                 .flatten
             )
             .flatten
-        case 0 => cBalanced(n / 2, x).map(t => Node(x, t, t))
+        case 0 =>
+          cBalanced(n / 2, x).flatMap(s =>
+            cBalanced(n / 2, x).map(t => Node(x, s, t))
+          )
       }
   }
+
+  def symmetricBalancedTrees[A](n: Int, x: A): List[S99Tree[A]] =
+    (n % 2) match {
+      case 1 => cBalanced(n, x).filter(_.isSymmetric)
+      case 0 => List.empty[S99Tree[A]]
+    }
 }

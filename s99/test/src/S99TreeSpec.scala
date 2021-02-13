@@ -57,4 +57,10 @@ class S99TreeSpec extends AnyFlatSpec with should.Matchers {
       Node('d', Node('e'), End)
     ).isSymmetric should be(true)
   }
+
+  "symmetricBalancedTrees" should "return all balanced symmetric trees with n elements" in {
+    S99Tree.symmetricBalancedTrees(5, "x").map(_.toString()) should be(
+      List("T(x T(x . T(x . .)) T(x T(x . .) .))", "T(x T(x T(x . .) .) T(x . T(x . .)))")
+    )
+  }
 }
