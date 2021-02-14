@@ -1,5 +1,5 @@
 import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
+import org.scalatest.matchers._
 import s99.binarytree.S99Tree
 
 import s99.binarytree.{Node, End}
@@ -89,5 +89,14 @@ class S99TreeSpec extends AnyFlatSpec with should.Matchers {
         "T(x T(x T(x . .) .) T(x . T(x . .)))"
       )
     )
+  }
+
+  "hbalTrees" should "return all trees whose subtrees have same height in left and right up to difference = 1" in {
+    val r = S99Tree.hbalTrees(4, "x")
+    r.foreach{
+      t => t.maxDepthDifference should be <= 1
+    }
+
+    r.length should be(315)
   }
 }

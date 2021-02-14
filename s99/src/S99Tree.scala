@@ -11,6 +11,16 @@ sealed abstract class S99Tree[+T] {
     case Node(value, left, right) => 1 + math.max(left.depth, right.depth)
   }
 
+  def maxDepthDifference: Int = this match {
+    case End => 0
+    case Node(value, left, right) =>
+      List(
+        math.abs(left.depth - right.depth),
+        left.maxDepthDifference,
+        right.maxDepthDifference
+      ).max
+  }
+
   def addValue[U >: T <% Ordered[U]](x: U): S99Tree[U] = this match {
     case End => Node(x)
     case Node(value, left, right) if x < value =>
@@ -98,4 +108,21 @@ object S99Tree {
 
   def fromList[U <% Ordered[U]](l: IterableOnce[U]): S99Tree[U] =
     l.foldLeft(End.asInstanceOf[S99Tree[U]])((a, b) => a.addValue(b))
+
+  def hbalTrees[A](h: Int, x: A): List[S99Tree[A]] = h match {
+    case 0 => List(End)
+    case 1 => List(Node(x))
+    case _ => {
+      val biggerSubtrees = hbalTrees(h - 1, x)
+      val smallerSubtrees = hbalTrees(h - 2, x)
+
+      biggerSubtrees.flatMap(t => {
+        val oneBiggerOneSmaller =
+          smallerSubtrees.flatMap(s => List(Node(x, t, s), Node(x, s, t)))
+        val bothSameHeight = biggerSubtrees.map(v => Node(x, v, t))
+
+        oneBiggerOneSmaller :++ bothSameHeight
+      })
+    }
+  }
 }
