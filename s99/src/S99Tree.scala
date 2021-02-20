@@ -49,6 +49,17 @@ sealed abstract class S99Tree[+T] {
     case End                      => 0
   }
 
+  def isLeafNode: Boolean = this match {
+    case Node(value, left, right) => left == End && right == End
+    case End => false
+  }
+
+  def leafCount: Int = this match {
+    case _ if this.isLeafNode => 1
+    case Node(value, left, right) => left.leafCount + right.leafCount 
+    case End => 0
+  }
+
   private def isMirrorOf(t: S99Tree[Any]): Boolean = {
     (this, t) match {
       case (t1: Node[Any], t2: Node[Any]) =>

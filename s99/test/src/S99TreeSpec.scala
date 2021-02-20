@@ -117,4 +117,8 @@ class S99TreeSpec extends AnyFlatSpec with should.Matchers {
     all(r.map(_.nodeCount)) should be(4)
     all(r.map(_.maxDepthDifference)) should be <= 1
   }
+
+  "leafCount" should "count leaves in tree" in {
+    all(S99Tree.cBalanced(5, "").map(_.leafCount)) should (be(2) or be(3))
+  }
 }
