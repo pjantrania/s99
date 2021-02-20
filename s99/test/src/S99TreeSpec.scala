@@ -93,10 +93,28 @@ class S99TreeSpec extends AnyFlatSpec with should.Matchers {
 
   "hbalTrees" should "return all trees whose subtrees have same height in left and right up to difference = 1" in {
     val r = S99Tree.hbalTrees(4, "x")
-    r.foreach{
-      t => t.maxDepthDifference should be <= 1
+    r.foreach { t =>
+      t.maxDepthDifference should be <= 1
     }
 
     r.length should be(315)
+  }
+
+  "minHbalNodes" should "return the smallest number of nodes for height h" in {
+    S99Tree.minHbalNodes(3) should be(4)
+    S99Tree.minHbalNodes(4) should be(7)
+  }
+
+  "maxHbalHeight" should "return maximum height achievable with n nodes" in {
+    (4 to 6).foreach { S99Tree.maxHbalHeight(_) should be(3) }
+    (7 to 11).foreach { S99Tree.maxHbalHeight(_) should be(4) }
+    (12 to 19).foreach { S99Tree.maxHbalHeight(_) should be(5) }
+  }
+
+  "hbalTreesWithNodes" should "return all height balanced trees with n nodes" in {
+    val r = S99Tree.hbalTreesWithNodes(4, "x")
+    r should have length (4)
+    all(r.map(_.nodeCount)) should be(4)
+    all(r.map(_.maxDepthDifference)) should be <= 1
   }
 }

@@ -44,6 +44,11 @@ sealed abstract class S99Tree[+T] {
       .mkString("\n")
   }
 
+  def nodeCount: Int = this match {
+    case Node(value, left, right) => 1 + left.nodeCount + right.nodeCount
+    case End                      => 0
+  }
+
   private def isMirrorOf(t: S99Tree[Any]): Boolean = {
     (this, t) match {
       case (t1: Node[Any], t2: Node[Any]) =>
@@ -125,4 +130,30 @@ object S99Tree {
       })
     }
   }
+
+  def minHbalNodes(h: Int): Int = h match {
+    case 0 => 0
+    case 1 => 1
+    case _ => 1 + minHbalNodes(h - 1) + minHbalNodes(h - 2)
+  }
+
+  def maxHbalNodes(h: Int): Int = math.pow(2, h).toInt - 1
+
+  def minHbalHeight(n: Int): Int = n match {
+    case 0 => 0
+    case _ => minHbalHeight(n / 2) + 1
+  }
+
+  def maxHbalHeight(n: Int): Int = n match {
+    case 0 => 0
+    case 1 => 1
+    case _ => Stream.from(2).dropWhile(x => minHbalNodes(x + 1) <= n).head
+  }
+
+  def hbalTreesWithNodes[A](n: Int, x: A): List[S99Tree[A]] =
+    (minHbalHeight(n) to maxHbalHeight(n))
+      .flatMap(hbalTrees(_, x))
+      .filter(_.nodeCount == n)
+      .toList
+
 }
