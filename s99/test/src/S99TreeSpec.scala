@@ -121,6 +121,16 @@ class S99TreeSpec extends AnyFlatSpec with should.Matchers {
     all(S99Tree.cBalanced(5, "").map(_.leafCount)) should (be(2) or be(3))
   }
 
+  "leafList" should "return list of leaf values" in {
+    Node('a',
+      Node('b'),
+      Node('c',
+        Node('d'),
+        Node('e')
+      )
+    ).leafList should be(List('b', 'd', 'e'))
+  }
+
   "nodeCount" should "count nodes in tree" in {
     val r = S99Tree.hbalTreesWithNodes(4, "x").head
     r.nodeCount should be(4)

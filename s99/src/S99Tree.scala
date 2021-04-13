@@ -2,6 +2,11 @@ package s99.binarytree
 
 sealed abstract class S99Tree[+T] {
 
+  def valueOption: Option[T] = this match {
+    case End                      => None
+    case Node(value, left, right) => Some(value)
+  }
+
   def fold[B](z: B)(t: (S99Tree[T], B) => B)(f: (B, B, B) => B): B =
     this match {
       case End => t(End, z)
@@ -20,10 +25,8 @@ sealed abstract class S99Tree[+T] {
       case (root, _, _) => root
     }
 
-  /**
-    * this doesn't really work--it discards
-    * the structure of the tree returned by `f` 
-    *
+  /** this doesn't really work--it discards
+    * the structure of the tree returned by `f`
     */
   private def flatMap[B](f: T => S99Tree[B]): S99Tree[B] =
     this.fold(S99Tree.empty[B]) {
@@ -81,6 +84,10 @@ sealed abstract class S99Tree[+T] {
 
   def leafCount: Int =
     this.fold(0)((t, _) => if (t.isLeafNode) 1 else 0)(_ + _ + _)
+
+  def leafList: List[T] = this.fold(List.empty[T])((t, l) =>
+    if (t.isLeafNode) List(t.valueOption.get) else Nil
+  )((x, l, r) => x ::: l ::: r)
 
   private def isMirrorOf(t: S99Tree[Any]): Boolean = {
     (this, t) match {
