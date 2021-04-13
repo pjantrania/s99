@@ -1,25 +1,52 @@
 package s99.binarytree
 
 sealed abstract class S99Tree[+T] {
+
+  def fold[B](z: B)(t: (S99Tree[T], B) => B)(f: (B, B, B) => B): B =
+    this match {
+      case End => t(End, z)
+      case n: Node[T] =>
+        f(t(n, z), n.left.fold(t(n, z))(t)(f), n.right.fold(t(n, z))(t)(f))
+    }
+
+  def map[B](f: T => B): S99Tree[B] =
+    this.fold(S99Tree.empty[B]) {
+      case (n: Node[T], _) =>
+        Node(f(n.value), End, End)
+      case (_, z) => z
+    } {
+      case (root: Node[B], left: S99Tree[B], right: S99Tree[B]) =>
+        Node(root.value, left, right)
+      case (root, _, _) => root
+    }
+
+  /**
+    * this doesn't really work--it discards
+    * the structure of the tree returned by `f` 
+    *
+    */
+  private def flatMap[B](f: T => S99Tree[B]): S99Tree[B] =
+    this.fold(S99Tree.empty[B]) {
+      case (n: Node[T], _) => f(n.value)
+      case (_, z)          => z
+    } {
+      case (root: Node[B], left: S99Tree[B], right: S99Tree[B]) =>
+        Node(root.value, left, right)
+      case (root, _, _) => root
+    }
+
   def isSymmetric: Boolean = this match {
     case End                  => true
     case Node(_, left, right) => left.isMirrorOf(right)
   }
 
-  def depth: Int = this match {
-    case End                      => 0
-    case Node(value, left, right) => 1 + math.max(left.depth, right.depth)
-  }
+  def depth: Int =
+    this.fold(0)((_, _) => 0)((_, left, right) => 1 + math.max(left, right))
 
-  def maxDepthDifference: Int = this match {
-    case End => 0
-    case Node(value, left, right) =>
-      List(
-        math.abs(left.depth - right.depth),
-        left.maxDepthDifference,
-        right.maxDepthDifference
-      ).max
-  }
+  def maxDepthDifference: Int = this.fold(0) {
+    case (t: Node[T], i) => math.max(i, math.abs(t.left.depth - t.right.depth))
+    case (_, i)          => i
+  }((_, l, r) => math.max(l, r))
 
   def addValue[U >: T <% Ordered[U]](x: U): S99Tree[U] = this match {
     case End => Node(x)
@@ -44,21 +71,16 @@ sealed abstract class S99Tree[+T] {
       .mkString("\n")
   }
 
-  def nodeCount: Int = this match {
-    case Node(value, left, right) => 1 + left.nodeCount + right.nodeCount
-    case End                      => 0
-  }
+  def nodeCount: Int =
+    this.fold[Int](0)((_, _) => 0)((root, left, right) => 1 + left + right)
 
   def isLeafNode: Boolean = this match {
     case Node(value, left, right) => left == End && right == End
-    case End => false
+    case End                      => false
   }
 
-  def leafCount: Int = this match {
-    case _ if this.isLeafNode => 1
-    case Node(value, left, right) => left.leafCount + right.leafCount 
-    case End => 0
-  }
+  def leafCount: Int =
+    this.fold(0)((t, _) => if (t.isLeafNode) 1 else 0)(_ + _ + _)
 
   private def isMirrorOf(t: S99Tree[Any]): Boolean = {
     (this, t) match {
@@ -69,16 +91,19 @@ sealed abstract class S99Tree[+T] {
     }
   }
 
-  private def collectNodesAtDepth(d: Int, c: Int = 1): List[S99Tree[Any]] =
-    this match {
-      case End                         => List.fill(math.pow(2, d - c).toInt)(End)
-      case Node(value, _, _) if c == d => List(Node(value))
-      case Node(_, left, right) =>
-        left.collectNodesAtDepth(d, c + 1) :++ right.collectNodesAtDepth(
-          d,
-          c + 1
-        )
-    }
+  def collectNodesAtDepth(d: Int): List[S99Tree[T]] =
+    this
+      .fold((1, List.empty[S99Tree[T]])) {
+        case (t, (c, l)) if c == d =>
+          t match {
+            case Node(value, _, _) => (c + 1, List(Node(value)))
+            case End               => (c + 1, List.fill(math.pow(2, d - c).toInt)(End))
+          }
+        case (_, (c, l)) => (c + 1, List.empty[S99Tree[T]])
+      } { (a, b, c) =>
+        (d, a._2 ::: b._2 ::: c._2)
+      }
+      ._2
 }
 
 case class Node[+T](value: T, left: S99Tree[T], right: S99Tree[T])
@@ -96,6 +121,8 @@ object Node {
 }
 
 object S99Tree {
+  def empty[T]: S99Tree[T] = End
+
   def cBalanced[A](n: Int, x: A): List[S99Tree[A]] = n match {
     case 0 => List(End)
     case 1 => List(Node(x))

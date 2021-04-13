@@ -1,8 +1,7 @@
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers._
-import s99.binarytree.S99Tree
 
-import s99.binarytree.{Node, End}
+import s99.binarytree.{S99Tree, Node, End}
 
 class S99TreeSpec extends AnyFlatSpec with should.Matchers {
   "cBalanced" should "return all possible balanced binary trees of size n" in {
@@ -120,5 +119,35 @@ class S99TreeSpec extends AnyFlatSpec with should.Matchers {
 
   "leafCount" should "count leaves in tree" in {
     all(S99Tree.cBalanced(5, "").map(_.leafCount)) should (be(2) or be(3))
+  }
+
+  "nodeCount" should "count nodes in tree" in {
+    val r = S99Tree.hbalTreesWithNodes(4, "x").head
+    r.nodeCount should be(4)
+  }
+
+  "depth" should "return the depth of the tree" in {
+    val r = S99Tree.hbalTrees(5, 'x').head
+    r.depth should be(5)
+  }
+
+  "maxDepthDifference" should "return the maximal difference in subtree depths" in {
+    /** test case has depth difference 1 at root, 2 at left subtree
+              x
+          x       x
+        x   .   x   x
+       x              
+    */
+    val t = Node(value = "x",
+      left=Node(value = "x",
+        left = Node(value = "x",
+          left = Node(value = "x"),
+          right = End
+        ),
+        right = End
+      ),
+      right = S99Tree.cBalanced(3, "x").head)
+    
+    t.maxDepthDifference should be(2)
   }
 }
