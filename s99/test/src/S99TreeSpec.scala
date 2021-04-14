@@ -160,4 +160,8 @@ class S99TreeSpec extends AnyFlatSpec with should.Matchers {
     
     t.maxDepthDifference should be(2)
   }
+
+  "internalList" should "return list of values from non-leaf nodes" in {
+    Node('a', Node('b'), Node('c', Node('d'), Node('e'))).internalList should be(List('a', 'c'))
+  }
 }

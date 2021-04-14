@@ -85,10 +85,16 @@ sealed abstract class S99Tree[+T] {
   def leafCount: Int =
     this.fold(0)((t, _) => if (t.isLeafNode) 1 else 0)(_ + _ + _)
 
-  def leafList: List[T] = this.fold(List.empty[T])((t, l) =>
-    if (t.isLeafNode) List(t.valueOption.get) else Nil
-  )((x, l, r) => x ::: l ::: r)
+  def leafList: List[T] = this.collect(_.isLeafNode).map(_.value)
 
+  def internalList: List[T] = this.collect(!_.isLeafNode).map(_.value)
+
+  private def collect(f: Node[T] => Boolean): List[Node[T]] =
+    this.fold(List.empty[Node[T]]) {
+      case (t: Node[T], _) if f(t) => List(t)
+      case _                       => Nil
+    }(_ ::: _ ::: _)
+  
   private def isMirrorOf(t: S99Tree[Any]): Boolean = {
     (this, t) match {
       case (t1: Node[Any], t2: Node[Any]) =>
