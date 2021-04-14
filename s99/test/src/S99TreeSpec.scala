@@ -122,13 +122,9 @@ class S99TreeSpec extends AnyFlatSpec with should.Matchers {
   }
 
   "leafList" should "return list of leaf values" in {
-    Node('a',
-      Node('b'),
-      Node('c',
-        Node('d'),
-        Node('e')
-      )
-    ).leafList should be(List('b', 'd', 'e'))
+    Node('a', Node('b'), Node('c', Node('d'), Node('e'))).leafList should be(
+      List('b', 'd', 'e')
+    )
   }
 
   "nodeCount" should "count nodes in tree" in {
@@ -142,30 +138,43 @@ class S99TreeSpec extends AnyFlatSpec with should.Matchers {
   }
 
   "maxDepthDifference" should "return the maximal difference in subtree depths" in {
+
     /** test case has depth difference 1 at root, 2 at left subtree
-              x
-          x       x
-        x   .   x   x
-       x              
-    */
-    val t = Node(value = "x",
-      left=Node(value = "x",
-        left = Node(value = "x",
-          left = Node(value = "x"),
-          right = End
-        ),
+      *              x
+      *          x       x
+      *        x   .   x   x
+      *       x
+      */
+    val t = Node(
+      value = "x",
+      left = Node(
+        value = "x",
+        left = Node(value = "x", left = Node(value = "x"), right = End),
         right = End
       ),
-      right = S99Tree.cBalanced(3, "x").head)
-    
+      right = S99Tree.cBalanced(3, "x").head
+    )
+
     t.maxDepthDifference should be(2)
   }
 
   "internalList" should "return list of values from non-leaf nodes" in {
-    Node('a', Node('b'), Node('c', Node('d'), Node('e'))).internalList should be(List('a', 'c'))
+    Node(
+      'a',
+      Node('b'),
+      Node('c', Node('d'), Node('e'))
+    ).internalList should be(List('a', 'c'))
   }
 
   "atLevel" should "return list of values at depth n" in {
-    Node('a', Node('b'), Node('c', Node('d'), Node('e'))).atLevel(2) should be(List('b', 'c'))
+    Node('a', Node('b'), Node('c', Node('d'), Node('e'))).atLevel(2) should be(
+      List('b', 'c')
+    )
+  }
+
+  "completeBinaryTree" should "return complete tree" in {
+    S99Tree.completeBinaryTree(6, 'x') should be(
+      Node('x', Node('x', Node('x'), Node('x')), Node('x', Node('x'), End))
+    )
   }
 }

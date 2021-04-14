@@ -99,7 +99,7 @@ sealed abstract class S99Tree[+T] {
       case (t: Node[T], _) if f(t) => List(t)
       case _                       => Nil
     }(_ ::: _ ::: _)
-  
+
   private def isMirrorOf(t: S99Tree[Any]): Boolean = {
     (this, t) match {
       case (t1: Node[Any], t2: Node[Any]) =>
@@ -212,4 +212,13 @@ object S99Tree {
       .filter(_.nodeCount == n)
       .toList
 
+  def completeBinaryTree[A](n: Int, x: A): S99Tree[A] = {
+    def helper(n: Int, a: Int): S99Tree[A] = {
+      if (n <= 0)
+        End
+      else Node(x, helper(n - a, 2 * a), helper(n - a - 1, 2 * a + 1))
+    }
+    
+    helper(n, 1)
+  }
 }
