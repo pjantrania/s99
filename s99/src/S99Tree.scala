@@ -89,6 +89,11 @@ sealed abstract class S99Tree[+T] {
 
   def internalList: List[T] = this.collect(!_.isLeafNode).map(_.value)
 
+  def atLevel(n: Int): List[T] = for {
+    t <- this.collectNodesAtDepth(n)
+    v <- t.valueOption
+  } yield (v)
+
   private def collect(f: Node[T] => Boolean): List[Node[T]] =
     this.fold(List.empty[Node[T]]) {
       case (t: Node[T], _) if f(t) => List(t)

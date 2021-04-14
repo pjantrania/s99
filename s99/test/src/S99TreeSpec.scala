@@ -164,4 +164,8 @@ class S99TreeSpec extends AnyFlatSpec with should.Matchers {
   "internalList" should "return list of values from non-leaf nodes" in {
     Node('a', Node('b'), Node('c', Node('d'), Node('e'))).internalList should be(List('a', 'c'))
   }
+
+  "atLevel" should "return list of values at depth n" in {
+    Node('a', Node('b'), Node('c', Node('d'), Node('e'))).atLevel(2) should be(List('b', 'c'))
+  }
 }
